@@ -70,6 +70,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let main_section = obj.add_subsection(StandardSection::Text, b"main");
     let main_offset = obj.add_symbol_data(main_symbol, main_section, &main_data, 1);
 
+    let test_symbol = obj.add_symbol(Symbol {
+        name: b"test".into(),
+        value: 0,
+        size: 0,
+        kind: SymbolKind::Label,
+        scope: SymbolScope::Linkage,
+        weak: false,
+        section: SymbolSection::Undefined,
+        flags: SymbolFlags::None,
+    });
+    let test_section = obj.add_subsection(StandardSection::Text, b"test");
+    let test_offset = obj.add_symbol_data(test_symbol, test_section, &[], 1);
+
     // Add a read only string constant for the puts argument.
     // We don't create a symbol for the constant, but instead refer to it by
     // the section symbol and section offset.
@@ -81,7 +94,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     obj.add_relocation(
         main_section,
         Relocation {
-            offset: main_offset + s_reloc_offset as u64,
+            offset: main_offset + test_offset + s_reloc_offset as u64,
             symbol: rodata_symbol,
             addend: s_offset as i64 + s_reloc_addend,
             flags: s_reloc_flags,
