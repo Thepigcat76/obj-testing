@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+byteorder = "1.5.0"
 logos = "0.15.0"
-object = {version = "0.36.4", features = ["all"]}
+object = {version = "0.36.7", features = ["all"]}
